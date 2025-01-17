@@ -2,12 +2,23 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+        int[][] arr = Q1(7, 9);
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[0].length; j++) {
+                System.out.print(arr[i][j]+" ");
+            }
+            System.out.println("");
+        }
+        System.out.println(q2("aabbbcccxxyaaa"));
+        System.out.println(Q5("to be or not to be","be"));
+        System.out.println(Q5("aaa","aa"));
     }
 
     //1
     public static int[][] Q1(int n, int m) {
         int[][] arr = new int[n][m];
         for (int i = 0; i < arr.length; i++) {
+
             for (int j = 0; j < arr[0].length; j++) {
                 if (i == 0 || j == 0)
                     arr[i][j] = 1;
@@ -36,8 +47,8 @@ public class Main {
         if (s1.isEmpty() || s1 == null || s2.isEmpty() || s2 == null)
             return 0;
         for (int i = 0; i < s1.length(); i++) {
-            if (s1.charAt(i) == s2.charAt(0)) {
-                for (int j = 1; j < s2.length(); j++) {
+            if (s1.charAt(i) == s2.charAt(0) && i+s2.length()<=s1.length()) {
+                for (int j = 0; j < s2.length(); j++) {
                     if (s1.charAt(i + j) != s2.charAt(j))
                         ok = false;
                 }
@@ -84,7 +95,7 @@ public class Main {
         }
 
         @Override
-        public double extream(Parabula p) {
+        public  double extream(Parabula p) {
             try{
                 return -p.get()[1]/(2*p.get()[0]);
             } catch (Exception e) {
@@ -93,10 +104,11 @@ public class Main {
         }
 
          private static int numberOfRealRoots(Parabula p) {
-            int count=0;
-            if (p.extream(p))
-
-            return count;
+            if(Math.pow(p.get()[1],2)-4*p.get()[0]*p.get()[2]>0)
+                return 2;
+             if(Math.pow(p.get()[1],2)-4*p.get()[0]*p.get()[2]==0)
+                 return 1;
+             return 0;
          }
 
     }
