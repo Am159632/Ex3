@@ -15,12 +15,12 @@ public class Main {
             System.out.println("");
         }
         System.out.println(q2("aabbbcccxxyaaa"));
-        System.out.println(Q5("to be or not to be", "be"));
-        System.out.println(Q5("aaa", "aa"));
-        double[] maxR = Q12(new double[]{4, 2, 3, 5, 0, 1});
+        System.out.println(Q3("to be or not to be", "be"));
+        System.out.println(Q3("aaa", "aa"));
+        double[] maxR = Q7(new double[]{4, 2, 3, 5, 0, 1});
         for (int i = 0; i < maxR.length; i++)
             System.out.println(maxR[i] + " ");
-        maxR = Q12(new double[]{3, 2, 1});
+        maxR = Q7(new double[]{3, 2, 1});
         for (int i = 0; i < maxR.length; i++)
             System.out.println(maxR[i] + " ");
     }
@@ -52,7 +52,7 @@ public class Main {
     }
 
     //3
-    public static int Q5(String s1, String s2) {
+    public static int Q3(String s1, String s2) {
         int count = 0;
         boolean ok = true;
         if (s1.isEmpty() || s1 == null || s2.isEmpty() || s2 == null)
@@ -69,8 +69,69 @@ public class Main {
         }
         return count;
     }
+    //5
+    public interface MyListInterface<T> {
+        /**
+         * Adds a String to the i"th link of the List.
+         */
+        public void addAt(T a, int i);
+
+        /**
+         * Removes the i"th element (link) of this List.
+         */
+        public void removeElementAt(int i);
+
+        /**
+         * Tests if ‘data’ is a member of this List.
+         */
+        public boolean contains(T data);
+
+        /**
+         * Returns the i"th element in this List.
+         */
+        public T get(int i);
+
+        /**
+         * Returns the number of Links in this List.
+         */
+        public int size();
+        public static int Q5(MyListInterface <T> l){
+            MyListInterface classes=new MyListInterface<T>();
+            boolean ok=true;
+
+            for (int i=0;i<l.size();i++){
+
+            }
+        return 0;
+    }
+    }
+    //6
+    public static boolean isPrime(int num)
+    {
+        for (int i = 2; i <= Math.sqrt(num); i++)
+            if (num % i == 0)
+                return false;
+
+        return true;
+    }
+    public static Boolean Q6(int n){
+        if (n<30)
+            return false;
+        ArrayList<Integer> primeFactors = new ArrayList<>();
+
+        for (int i = 2; i <= n; i++) {
+            while (n % i == 0) {
+                if (primeFactors.contains(i)) {
+                    return false;
+                }
+                primeFactors.add(i);
+                n /= i;
+            }
+        }
+        return primeFactors.size() == 3;
+    }
     //7
-    public static double[] Q12(double[] arr) {
+    public static double[] Q7(double[] arr) {
         int count = 1, startI = 0, maxR = 0, startMax = 0;
         for (int i = 0; i < arr.length - 1; i++) {
             if (arr[i] < arr[i + 1]) {
