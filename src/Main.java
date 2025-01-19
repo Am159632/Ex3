@@ -277,8 +277,7 @@ public class Main {
         public final Point2D ORIGIN =new Point2D(0,0);
         private double _x, _y;
         public Point2D(double a,double b) {_x=a; _y=b;  }  // Standard Constructor.
-        public Point2D(Point2D p) { this(p.x(), p.y()); }
-// Copy Constructor
+        public Point2D(Point2D p) { this(p.x(), p.y()); }// Copy Constructor
         /** String Constructor: following this String structure:  "-1.2,5.3" --> (-1.2,5.3) ; */
         public Point2D(String s) {
             String[] a = s.split(",");
@@ -422,5 +421,10 @@ public class Main {
             }
             a=result;
         }
+    }
+    //18
+    public static String[] allCodes(){
+        String[]arr=new String[120];
+        return arr;
     }
 }
