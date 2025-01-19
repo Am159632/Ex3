@@ -95,14 +95,14 @@ public class Main {
          * Returns the number of Links in this List.
          */
         public int size();
-        public static int Q5(MyListInterface <T> l){
-            MyListInterface classes=new MyListInterface<T>();
+        public static int Q5(MyListInterface  l){
+            ArrayList<String> classes=new ArrayList<>();
             boolean ok=true;
-
             for (int i=0;i<l.size();i++){
-
+                if (classes.contains(l.get(i).getClass().getName()))
+                    classes.add(l.get(i).getClass().getName());
             }
-        return 0;
+        return classes.size();
     }
     }
     //6
