@@ -1,12 +1,16 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        System.out.println(Math.log(4));
+        Scanner sc = new Scanner(System.in);
+        System.out.println("מספר ספניק?");
+        int n=sc.nextInt();
+        System.out.println(Q6(n));
         int[][] arr = Q1(7, 9);
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr[0].length; j++) {
@@ -106,21 +110,13 @@ public class Main {
     }
     }
     //6
-    public static boolean isPrime(int num)
-    {
-        for (int i = 2; i <= Math.sqrt(num); i++)
-            if (num % i == 0)
-                return false;
-
-        return true;
-    }
     public static Boolean Q6(int n){
         if (n<30)
             return false;
         ArrayList<Integer> primeFactors = new ArrayList<>();
 
         for (int i = 2; i <= n; i++) {
-            while (n % i == 0) {
+            while (n % i == 0 ) {
                 if (primeFactors.contains(i)) {
                     return false;
                 }
@@ -242,6 +238,38 @@ public class Main {
         double x = 1 + Math.max(q11(bt.getLeft()),q11(bt.getRight()));
         double y = Math.log(bt.size()) / (int) (Math.log(2));
         return x / y;
+    }
+    //13
+    public static <T> void mySort(T[] p, Comparator<T> comp) {
+        quickSort(p, 0, p.length - 1, comp);
+    }
+
+    private static <T> void quickSort(T[] arr, int low, int high, Comparator<T> comp) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high, comp);
+            quickSort(arr, low, pivotIndex - 1, comp);
+            quickSort(arr, pivotIndex + 1, high, comp);
+        }
+    }
+
+    private static <T> int partition(T[] arr, int low, int high, Comparator<T> comp) {
+        T pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (comp.compare(arr[j], pivot) <= 0) {
+                i++;
+                T temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+
+        T temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+
+        return i + 1;
     }
     //15,16
     interface Parabula {
