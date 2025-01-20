@@ -1,7 +1,12 @@
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Scanner;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -187,11 +192,19 @@ public class Main {
     }
     //8
     public static boolean isOfTheSameStructure(BinaryTree bt1, BinaryTree bt2) {
-        if((bt1.isEmpty()|| bt1==null) && (bt2.isEmpty()|| bt2==null))
+        if (bt1 == null && bt2 == null)
             return true;
-        if((bt1.isEmpty()|| bt1==null) || (bt2.isEmpty()|| bt2==null))
+        if (bt1 == null || bt2 == null)
+            return false;
+        if (bt1.isEmpty() && bt2.isEmpty())
+            return true;
+        if (bt1.isEmpty() || bt2.isEmpty())
             return false;
         return isOfTheSameStructure(bt1.getLeft(),bt2.getLeft()) && isOfTheSameStructure(bt1.getRight(),bt2.getRight());
+    }
+    @Test
+    void isOfTheSameStructure(){
+      // BinaryTree bt1=new BinaryTree(1,null,null);
     }
     //9
     public static <T> int q9(BinaryTree<T> bt1, int min, int max){
@@ -236,7 +249,7 @@ public class Main {
         if (bt.getLeft() == null && bt.getRight() == null)
             return 0;
         double x = 1 + Math.max(q11(bt.getLeft()),q11(bt.getRight()));
-        double y = Math.log(bt.size()) / (int) (Math.log(2));
+        double y = Math.log(bt.size()) / Math.ceil(Math.log(2));
         return x / y;
     }
     //13
@@ -306,6 +319,9 @@ public class Main {
             return ((_x==p._x) && (_y==p._y));  }
         public boolean close2equals(Point2D p2, double eps) {
             return (this.distance(p2) < eps);
+        }
+        public double angle_deg(Point2D ot){
+            return 0;
         }
     }
     public class Elipse {
@@ -378,11 +394,7 @@ public class Main {
 
         @Override
         public double extream(Parabula p) {
-            try {
                 return -p.get()[1] / (2 * p.get()[0]);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
         }
 
         private static int numberOfRealRoots(Parabula p) {
@@ -422,9 +434,262 @@ public class Main {
             a=result;
         }
     }
+    //17
+    public interface GeoShape {
+        /**
+         * Computes if the point (ot) falls inside this (closed) shape.
+         */
+        public boolean contains(Point2D ot);
+
+        /**
+         * Computes the area of this shape
+         */
+        public double area();
+
+        /**
+         * Computes the perimeter of this shape.
+         */
+        public double perimeter();
+
+        /**
+         * Move this shape by the vector 0,0-->vec
+         * Note: this method changes the inner state of the object.
+         */
+        public void move(Point2D vec);
+
+        /**
+         * This method computes a new (deep) copy of this GeoShape.
+         */
+        public GeoShape copy();
+
+        /**
+         * This method returns an String representing this shape.
+         */
+        public String toString();
+
+        /**
+         * This method returns an inner point – within this GeoShape.
+         */
+        public Point2D innerPoint();
+    }
+    public interface ShapeFilter {
+        public boolean filter(GeoShape s); // returns true iff s passes this Filter.
+    }
+    public class AreaFilter implements ShapeFilter{
+        private GeoShape g;
+        public AreaFilter(GeoShape g){
+            this.g=g;
+        }
+        @Override
+        public boolean filter(GeoShape s) {
+            return this.g.area()<s.area();
+        }
+    }
+    public class PointsFilter implements ShapeFilter{
+        private Point2D[] arr;
+        public PointsFilter(Point2D[] arr){
+            this.arr=arr;
+        }
+        @Override
+        public boolean filter(GeoShape s) {
+            for (int i=0;i<this.arr.length;i++){
+                if (!s.contains(this.arr[i]))
+                    return false;
+            }
+            return true;
+        }
+    }
+    public static GeoShape[] passFilter(GeoShape[] arr,AreaFilter filter){
+        ArrayList<GeoShape> pass=new ArrayList<>();
+        for (int i=0;i<arr.length;i++){
+            if (filter.filter(arr[i]))
+                pass.add(arr[i]);
+        }
+        return (GeoShape[]) pass.toArray();
+    }
     //18
     public static String[] allCodes(){
         String[]arr=new String[120];
+        int index=0;
+        for (int a = 1; a <= 5; a++) {
+            for (int b = 1; b <= 5; b++) {
+                if (b!=a){
+                for (int c = 1; c <= 5; c++) {
+                    if (c != a && c != b) {
+                        for (int d = 1; d <= 5; d++) {
+                            if (d != a && d != b && d != c) {
+                                arr[index] = a + "" + b + "" + c + "" + d + "#";
+                                index++;
+                            }
+                        }
+                    }
+                }
+                }
+            }
+        }
         return arr;
+    }
+    @Test
+    void testAllCodes(){
+        String[] codes = allCodes();
+        assertEquals(120, codes.length);
+        for (int i=0;i<codes.length;i++) {
+            assertEquals(5, codes[i].length());
+            assertTrue(codes[i].endsWith("#"));
+        }
+        for (int i=0;i<codes.length;i++){
+            for (int j=0;j<codes.length ;j++){
+                if (i!=j)
+                    assertTrue(!codes[j].equals(codes[i]));
+            }
+        }
+    }
+    //19
+    public class Circle2D implements GeoShape{
+        private Point2D center = null;
+        private double _rad;
+        private static int _counter =0;
+
+        public Circle2D(Point2D c, double r) {
+            this.center = new Point2D(c);
+            this._rad = r;
+            _counter++;
+        }
+        public static int get_counter() {return _counter;}
+        public Circle2D(Circle2D c) {
+            this(c.center, c._rad);
+        }
+        /**
+         * "1,2,3" ==> cen(1,2) radius(3)
+         * @param s
+         */
+        public Circle2D(String s) {
+            String[] a = s.split(",");//{"1","2","3"}
+            double x = Double.parseDouble(a[1]);
+            double y = Double.parseDouble(a[2]);
+            double r = Double.parseDouble(a[3]);
+            center = new Point2D(x,y);
+            _rad = r;
+            _counter++;
+        }
+
+        public double getRad() {return _rad;}
+        public Point2D getCenter() {return new Point2D(center);} // new Point2D(_cen);
+        /**
+         * 1,2,3 ==> Circle: _center: (1,2), radius: 3
+         * double r = Math.random(); [0,1);
+         */
+        public String toString() {
+            String ans = center.toString()+","+this.getRad();
+            return ans;
+        }
+
+        @Override
+        public Point2D innerPoint() {
+            return null;
+        }
+
+        public String toStringLong() {
+            String ans = this.getClass().getSimpleName()+", " + center.toString()+","+this.getRad();
+            return ans;
+        }
+        @Override
+        public boolean contains(Point2D p) {
+            return this.getRad() > p.distance(this.center);
+        }
+        public Point2D getRandomInnerPoint() {
+            Point2D ans = null;
+            double minX = this.center.x()-_rad;
+            double minY = this.center.y()-_rad;
+            while(ans==null) {
+                double x = minX + Math.random()*2*_rad;
+                double y = minY + Math.random()*2*_rad;
+                Point2D p = new Point2D(x,y);
+                if(this.contains(p)) {
+                    ans = p;
+                }
+            }
+            return ans;
+        }
+        public Point2D getRandomInnerPoint2() {
+            Point2D ans = new Point2D(this.center);
+            double ang = Math.random()*2*Math.PI;// [0,360deg]
+            double d = Math.random()*this._rad;  // [0,_radius]
+            d = Math.pow(d, 0.5);
+            double dx = d* Math.cos(ang);
+            double dy = d* Math.sin(ang);
+            Point2D dd = new Point2D(dx,dy);
+            ans.move(dd);
+            return ans;
+        }
+        public void move(Point2D p) {
+            this.center.move(p);
+        }
+        public Point2D centerOfMass() {
+            // TODO Auto-generated method stub
+            return new Point2D(this.getCenter());
+        }
+        @Override
+        public double perimeter() {
+            return 2*this.getRad() * Math.PI;
+        }
+        @Override
+        public GeoShape copy() {
+            // TODO Auto-generated method stub
+            return new Circle2D(this);
+        }
+        @Override
+        public double area() {
+            return Math.pow(_rad, 2) * Math.PI;
+        }
+        @Override
+        public boolean equals(Object c)
+        {
+            if(c==null || !(c instanceof Circle2D)) {return false;}
+            Circle2D c2 = (Circle2D) c;
+            return this.getRad()==c2._rad &&
+                    this.center.equals(c2.getCenter());
+        }
+
+    }
+    public class Pizza implements GeoShape{
+        private Circle2D circle;
+        private double sZavit;
+        private double eZavit;
+        public Pizza(Circle2D c,double sZavit,double eZavit){
+            this.circle=new Circle2D(c);
+            this.sZavit=sZavit;
+            this.eZavit=eZavit;
+        }
+        @Override
+        public boolean contains(Point2D ot) {
+            return this.circle.contains(ot) && this.circle.getCenter().angle_deg(ot)>=this.sZavit
+                    && this.circle.getCenter().angle_deg(ot)<=this.eZavit;
+        }
+
+        @Override
+        public double area() {
+            return this.circle.area()*(this.eZavit-this.eZavit)/360;
+        }
+
+        @Override
+        public double perimeter() {
+            return this.circle.perimeter()*(this.eZavit-this.eZavit)/360+2*this.circle.getRad();
+        }
+
+        @Override
+        public void move(Point2D vec) {
+
+        }
+
+        @Override
+        public GeoShape copy() {
+            return null;
+        }
+
+        @Override
+        public Point2D innerPoint() {
+            return null;
+        }
     }
 }
