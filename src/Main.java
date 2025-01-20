@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Test;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -76,6 +76,39 @@ public class Main {
             }
         }
         return count;
+    }
+    public class MyList<T> implements MyListInterface<T> {
+
+        private List<T> list;
+
+        public MyList() {
+            list = new ArrayList<>();
+        }
+
+        @Override
+        public void addAt(T a, int i) {
+            list.add(i, a);
+        }
+
+        @Override
+        public void removeElementAt(int i) {
+            list.remove(i);
+        }
+
+        @Override
+        public boolean contains(T data) {
+            return list.contains(data);
+        }
+
+        @Override
+        public T get(int i) {
+            return list.get(i);
+        }
+
+        @Override
+        public int size() {
+            return list.size();
+        }
     }
     //4a1
     public static <T> boolean isSet(MyListInterface<T>  l){
