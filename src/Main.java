@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+        System.out.println(Q12("abcdcb"));
+        System.out.println(Q12("abracadabra"));
         Scanner sc = new Scanner(System.in);
         System.out.println("מספר ספניק?");
         int n=sc.nextInt();
@@ -74,6 +76,45 @@ public class Main {
             }
         }
         return count;
+    }
+    //4a1
+    public static <T> boolean isSet(MyListInterface<T>  l){
+        for (int i=0;i<l.size()-1;i++) {
+            for (int j =i+1 ; j < l.size(); j++) {
+                if (l.get(i).equals(l.get(j)))
+                    return false;
+            }
+        }
+        return true;
+    }
+    //4a2
+    public static <T> MyListInterface<T> toSet(MyListInterface<T>  l) {
+       MyListInterface<T> ans=new MyListInterface<T>();
+        for (int i = 0; i < l.size(); i++) {
+            if (!ans.contains(l.get(i)))
+                ans.addAt(l.get(i),ans.size());
+        }
+        return ans;
+    }
+    //4b1
+    public static <T> MyListInterface<T> intersect(MyListInterface<T>  l1, MyListInterface<T>  l2){
+        MyListInterface<T> ans=new MyListInterface<T>();
+        for (int i = 0; i < l1.size(); i++){
+            if (l2.contains(l1.get(i)))
+                ans.addAt(l1.get(i),ans.size());
+        }
+        return ans;
+    }
+    //4b2
+    public static <T> MyListInterface<T> union(MyListInterface<T>  l1, MyListInterface<T>  l2){
+        MyListInterface<T> ans=new MyListInterface<T>();
+        for (int i = 0; i < l1.size(); i++){
+                ans.addAt(l1.get(i),ans.size());
+        }
+        for (int i = 0; i < l1.size(); i++){
+            ans.addAt(l2.get(i),ans.size());
+        }
+        return toSet(ans);
     }
     //5
     public interface MyListInterface<T> {
@@ -248,6 +289,21 @@ public class Main {
         double x = 1 + Math.max(q11(bt.getLeft()),q11(bt.getRight()));
         double y = Math.log(bt.size()) / Math.ceil(Math.log(2));
         return x / y;
+    }
+    //12
+    public static String Q12(String s){
+        int[]arr=new int['z'-'a'];
+        String ans="";
+        for (int i=0;i<arr.length;i++)
+            arr[i]=0;
+        for (int i=0;i<s.length();i++){
+            arr[s.charAt(i)-'a']++;
+        }
+        for (int i=0;i<arr.length;i++) {
+            if (arr[i] == 1)
+                ans += (char) (i + 'a');
+        }
+        return ans;
     }
     //13
     public static <T> void mySort(T[] p, Comparator<T> comp) {
