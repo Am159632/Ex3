@@ -1,9 +1,6 @@
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -284,6 +281,41 @@ public class Main {
 
         return i + 1;
     }
+    @Test
+    void testSort() {
+        int[] sizes = {100, 1000, 10000};
+        for (int size : sizes) {
+            String[] arr = RandomStringsToArray(size);
+            long startTime = System.nanoTime();
+            Main.mySort(arr, Comparator.naturalOrder());
+            long endTime = System.nanoTime();
+            long mySortDuration = endTime - startTime;
+            startTime = System.nanoTime();
+            Arrays.sort(arr, Comparator.naturalOrder());
+            endTime = System.nanoTime();
+            long arraysSortDuration = endTime - startTime;
+            assertTrue(mySortDuration >= arraysSortDuration);
+        }
+    }
+
+    public static String[] RandomStringsToArray(int size) {
+        String[] arr = new String[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = RandomString();
+        }
+        return arr;
+    }
+
+    public static String RandomString() {
+        String ans = "";
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        int length=(int)(Math.random() * 20);
+        for (int i = 0; i < length; i++) {
+            int index = (int) (Math.random() * alphabet.length());
+            ans+=""+alphabet.charAt(index);
+        }
+        return ans;
+    }
     //14
     public class Point2D {
         public static final double EPS = 0.001;
@@ -484,6 +516,14 @@ public class Main {
         public boolean filter(GeoShape s) {
             return this.g.area()<s.area();
         }
+        public static GeoShape[] passFilter(GeoShape[] arr,AreaFilter filter){
+            ArrayList<GeoShape> pass=new ArrayList<>();
+            for (int i=0;i<arr.length;i++){
+                if (filter.filter(arr[i]))
+                    pass.add(arr[i]);
+            }
+            return (GeoShape[]) pass.toArray();
+        }
     }
     public class PointsFilter implements ShapeFilter{
         private Point2D[] arr;
@@ -498,14 +538,6 @@ public class Main {
             }
             return true;
         }
-    }
-    public static GeoShape[] passFilter(GeoShape[] arr,AreaFilter filter){
-        ArrayList<GeoShape> pass=new ArrayList<>();
-        for (int i=0;i<arr.length;i++){
-            if (filter.filter(arr[i]))
-                pass.add(arr[i]);
-        }
-        return (GeoShape[]) pass.toArray();
     }
     //18
     public static String[] allCodes(){
